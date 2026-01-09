@@ -38,6 +38,7 @@ global traj_z = zeros(it_max);
 global X = zeros(it_max);
 global Y = zeros(it_max);
 global Z = zeros(it_max);
+global error_orient = zeros(it_max);
 
 setjointposition(clientID,angle,7,0,objectname_kuka);
 
@@ -55,8 +56,10 @@ while (norm(p0 - pos_desiree) > 0.001 || norm(ϵ0) > 0.001) && (i < it_max)
     global X[i] = p0[1]
     global Y[i] = p0[2]
     global Z[i] = p0[3]
+    global error_orient[i] = norm(ϵ0);
     # Variables de boucle
-    global i = i+1;   
+    global i = i+1;
+    # Mise à jour variable globale
     global angle = q;
 end
 
@@ -102,3 +105,12 @@ p3 = plot(
 )
 
 display(p3)
+
+# Erreur d’orientation
+p4 = plot(
+    error_orient[1:i-1],
+    xlabel="Itération",
+    ylabel="Erreur d’orientation",
+    title="Évolution de l’erreur d’orientation",
+    legend=false
+)
